@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #textarea{width: 100%;height: 500px;}
+    </style>
+</head>
+<body>
+    <textarea id="textarea"></textarea>
+    <div>
+        <button id="button1">转为简体</button>
+        <button id="button2">转为繁体</button>
+    </div>
+    <script>
+        const textarea = document.querySelector("#textarea")
+        function post(target, data){
+            return fetch(target, {
+                method: 'post',
+                body: JSON.stringify(data),
+                headers: {"content-type": "application/json"}
+            }).then(res=>res.json()).then(({data})=>{
+                textarea.value=data
+            });
+        }
+        function t2s(str){return post('/tw2s', { q: str })}
+        function s2t(str){return post('/s2tw', { q: str })}
+        document.querySelector("#button1").addEventListener('click', function(){t2s(textarea.value)})
+        document.querySelector("#button2").addEventListener('click', function(){s2t(textarea.value)})
+    </script>
+</body>
+</html>
