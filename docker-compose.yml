@@ -1,0 +1,9 @@
+version: '3'
+services:
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    network_mode: bridge
+    ports:
+      - "7107:3000"
