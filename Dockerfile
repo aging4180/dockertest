@@ -14,7 +14,7 @@ RUN apk add --no-cache \
 COPY . .
 
 # 安装 Python 依赖（含 opencc），使用阿里云镜像源
-RUN pip install --no-cache-dir -r requirements.txt -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com
+RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 3000
 
