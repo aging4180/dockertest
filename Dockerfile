@@ -1,10 +1,20 @@
-FROM python:3.11.6
+FROM python:3.12-alpine
+
 WORKDIR /
+
+# 安装 opencc 所需依赖
+RUN apk add --no-cache \
+    build-base \
+    cmake \
+    git \
+    opencc \
+    opencc-dev
+
+# 拷贝项目文件
 COPY . .
 
-# RUN apt-get install libstdc++6
-
-RUN pip install -r requirements.txt -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com
+# 安装 Python 依赖（含 opencc），使用阿里云镜像源
+RUN pip install --no-cache-dir -r requirements.txt -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com
 
 EXPOSE 3000
 
