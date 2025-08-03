@@ -5,15 +5,15 @@ RUN apk add --no-cache build-base cmake git opencc opencc-dev zlib-dev
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 #RUN python -c "import site; print(site.getsitepackages())"
+RUN ls -al /usr/local/lib/
 
 # 运行阶段：复制代码 & 依赖
-
 FROM python:3.12-alpine
 WORKDIR /
 
 #COPY --from=builder /usr/lib/python3.12/site-packages /usr/lib/python3.12/site-packages
 COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
-
+COPY --from=builder /usr/local/lib/libopencc* /usr/local/lib/
 # 拷贝项目文件
 COPY . .
 
