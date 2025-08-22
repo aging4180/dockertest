@@ -27,7 +27,7 @@ jobs:
           echo "TAR_NAME=$TAR_FILE" >> $GITHUB_ENV
 
       - name: Upload image artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.TAR_NAME }}
           path: ${{ env.TAR_NAME }}
