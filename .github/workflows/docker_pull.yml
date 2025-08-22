@@ -1,0 +1,34 @@
+name: Save Docker Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      image:
+        description: 'Docker 镜像 (比如 nginx:1.25)'
+        required: true
+        default: 'nginx:1.25'
+
+jobs:
+  save-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull Docker image (linux/amd64)
+        run: |
+          docker pull --platform=linux/amd64 ${{ github.event.inputs.image }}
+
+      - name: Save image to tar
+        run: |
+          IMAGE="${{ github.event.inputs.image }}"
+          # 把 / 和 : 替换为 _，并只保留字母数字和下划线及短横线
+          SAFE_NAME=$(echo "$IMAGE" | tr '/:' '_' | tr -cd '[:alnum:]_-')
+          TAR_FILE="${SAFE_NAME}-amd64.tar"
+          docker save "$IMAGE" -o "$TAR_FILE"
+          # 写入环境变量，供后续 step 使用
+          echo "TAR_NAME=$TAR_FILE" >> $GITHUB_ENV
+
+      - name: Upload image artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.TAR_NAME }}
+          path: ${{ env.TAR_NAME }}
+          retention-days: 1
